@@ -1,0 +1,50 @@
+@startuml caso02_turnos
+
+skinparam classAttributeIconSize 0
+skinparam classFontStyle Bold
+skinparam backgroundColor #FAFAFA
+skinparam class {
+    BackgroundColor #EEF2FF
+    BorderColor #4F46E5
+    ArrowColor #4F46E5
+}
+
+class Persona {
+    - __nombre : str
+    - __documento : str
+    --
+    + nombre : str  <<property>>
+    + documento : str  <<property>>
+    + __str__() : str
+}
+
+class Turno {
+    - __persona : Persona
+    - __numero : int
+    --
+    + persona : Persona  <<property>>
+    + numero : int  <<property>>
+    + __str__() : str
+}
+
+class CajaAtencion {
+    - __turnos : list[Turno]
+    - __contador : int
+    --
+    + agregar_persona(persona: Persona) : Turno
+    + atender_siguiente() : Turno | None
+    + esta_vacia() : bool
+    + proximo_turno() : Turno | None
+    + turnos_en_espera() : int
+}
+
+Turno "1" --> "1" Persona : tiene >
+CajaAtencion "1" o-- "0..*" Turno : gestiona (FIFO) >
+
+note bottom of CajaAtencion
+  Cola FIFO: el primero
+  en llegar es el primero
+  en ser atendido.
+end note
+
+@enduml
